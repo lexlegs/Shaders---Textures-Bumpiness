@@ -86,22 +86,20 @@ UnityIndirect CreateIndirectLight (Interpolators i) {
 }
 
 void InitializeFragmentNormal(inout Interpolators i) {
-	i.normal.xy = tex2D(_NormalMap, i.uv).wy * 2 - 1;
-	i.normal.xy *= _BumpScale;
-	i.normal.z = sqrt(1 - saturate(dot(i.normal.xy, i.normal.xy)));
-
-	i.normal = UnpackScaleNormal(tex2D(_NormalMap, i.uv), _BumpScale);
-	i.normal = i.normal.xzy;
+	float h = tex2D(_HeightMap, i.uv);
+	i.normal = float3(0, 1, 0);
 	i.normal = normalize(i.normal);
 }
 
 float4 MyFragmentProgram (Interpolators i) : SV_TARGET {
-	i.normal = normalize(i.normal);
+	InitializeFragmentNormal(i);
+
+	//i.normal = normalize(i.normal);
 
 	float3 viewDir = normalize(_WorldSpaceCameraPos - i.worldPos);
 
 	float3 albedo = tex2D(_MainTex, i.uv).rgb * _Tint.rgb;
-	albedo *= tex2D(_HeightMap, i.uv);
+	//albedo *= tex2D(_HeightMap, i.uv);
 
 	float3 specularTint;
 	float oneMinusReflectivity;
