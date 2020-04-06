@@ -94,8 +94,8 @@ void InitializeFragmentNormal(inout Interpolators i) {
 	//float v1 = tex2D(_HeightMap, i.uv - dv);
 	//float v2 = tex2D(_HeightMap, i.uv + dv);
 
-	i.normal = tex2D(_NormalMap, i.uv).rgb;
-	i.normal = normalize(i.normal);
+	i.normal = tex2D(_NormalMap, i.uv).xyz * 2 - 1;
+	i.normal = normalize(i.normal).xzy;
 }
 
 float4 MyFragmentProgram (Interpolators i) : SV_TARGET {
